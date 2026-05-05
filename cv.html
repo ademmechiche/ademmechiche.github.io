@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CV – Adem Mechiche</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/app.js"></script>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">Adem Mechiche</div>
+    <nav class="nav">
+        <a href="index.html">A propos</a>
+        <a href="cv.html" class="active">CV</a>
+        <a href="ap-1ere-annee/ap1.html">AP 1ère année</a>
+        <a href="ap-2eme-annee/ap1.html">AP 2ème année</a>
+        <a href="stage-1ere-annee/presentation-organisation.html">Stage 1ère année</a>
+        <a href="stage-2eme-annee/presentation-organisation.html">Stage 2ème année</a>
+        <a href="veille.html">Veille Technologique</a>
+        <a href="synthese.html">Synthèse</a>
+    </nav>
+</header>
+
+<main>
+
+<section class="section fade">
+    <h2>CV</h2>
+    <p class="intro">Informations principales et compétences techniques.</p>
+</section>
+
+<section class="cv-grid fade">
+
+    <div class="cv-col">
+        <h3>Contact</h3>
+
+        <p><strong>Email :</strong> <span id="mail"></span></p>
+        <p><strong>Téléphone :</strong> <span id="phone"></span></p>
+
+        <script>
+            const m1="adem200769",m2="@gmail.com";
+            document.getElementById("mail").innerHTML=`<a href="mailto:${m1+m2}">${m1+m2}</a>`;
+            const n=["07","61","28","70","31"];
+            document.getElementById("phone").innerHTML=n.join(" ");
+        </script>
+
+        <h3>Savoir-être</h3>
+        <ul>
+            <li>Autonomie</li>
+            <li>Adaptation</li>
+            <li>Esprit d'équipe</li>
+            <li>Rigueur</li>
+        </ul>
+
+        <h3>Langues</h3>
+        <ul>
+            <li>Français</li>
+            <li>Anglais</li>
+            <li>Espagnol</li>
+        </ul>
+    </div>
+
+    <div class="cv-col">
+        <h3>Profil</h3>
+        <p>
+            Étudiant en BTS SIO SISR, orienté administration système, réseau et cybersécurité.
+        </p>
+
+        <h3>Formation</h3>
+        <ul>
+            <li>BTS SIO – Option SISR (en cours)</li>
+            <li>Bac STI2D – 2025</li>
+            <li>Brevet – 2022</li>
+        </ul>
+
+        <h3>Compétences techniques</h3>
+        <p><strong>Systèmes :</strong> Windows Server, Linux, AD, DNS, GPO, Bash, PowerShell.</p>
+        <p><strong>Réseaux :</strong> VLAN, routage, NAT, Cisco, Wireshark.</p>
+        <p><strong>Services :</strong> Apache, MySQL, PHP, Samba, OCS, GLPI.</p>
+        <p><strong>Outils :</strong> VMware, VirtualBox, PRTG, Docker (bases).</p>
+
+        <h3>CV PDF</h3>
+        <a href="MechicheAdemcvstage.pdf" class="btn" target="_blank">Télécharger mon CV</a>
+    </div>
+
+</section>
+
+</main>
+
+<footer class="footer">
+    © 2026 – Portfolio d’Adem Mechiche
+</footer>
+
+</body>
+</html>
