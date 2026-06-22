@@ -27,34 +27,163 @@
 
 <section class="section fade">
     <h2>AP 1 – Serveur de fichiers Samba</h2>
-    <p class="intro">Mise en place d’un serveur de fichiers Samba pour le partage réseau.</p>
+    <p class="intro">
+        Mise en place complète d’un serveur de fichiers Samba sous Debian permettant le partage sécurisé de répertoires pour différents utilisateurs et groupes.
+    </p>
 </section>
 
 <section class="sp-list">
 
+    <!-- CONTEXTE -->
     <article class="sp-card fade">
         <h3>Contexte</h3>
-        <p>Installation d’un serveur Linux permettant le partage de fichiers via Samba.</p>
+        <p>
+            Dans le cadre du module Système du BTS SIO SISR, nous avons dû installer et configurer un serveur de fichiers Samba sous GNU/Debian.
+            L’objectif était de permettre à des utilisateurs Windows et Linux d’accéder à des répertoires partagés avec des droits différents selon leur groupe.
+        </p>
+        <p>
+            Le serveur devait être intégré dans un réseau local en <strong>172.30.1XX.0/24</strong> avec :
+        </p>
+        <ul>
+            <li>un serveur Debian (Samba),</li>
+            <li>un client Windows,</li>
+            <li>un client Debian/Ubuntu,</li>
+            <li>des utilisateurs répartis dans deux groupes : gpb1sio1 et gpb1sio2.</li>
+        </ul>
     </article>
 
+    <!-- BESOIN -->
     <article class="sp-card fade">
         <h3>Besoin</h3>
-        <p>Créer des partages réseau sécurisés pour différents utilisateurs.</p>
+        <p>
+            L’entreprise fictive souhaite mettre en place un serveur de fichiers centralisé permettant :
+        </p>
+        <ul>
+            <li>un répertoire personnel pour chaque utilisateur,</li>
+            <li>un répertoire partagé commun (B1Sio),</li>
+            <li>deux sous-répertoires avec droits différents (B1Sio1 et B1Sio2),</li>
+            <li>un accès depuis Windows et Linux,</li>
+            <li>un partage “PartagePourTous” accessible en écriture,</li>
+            <li>un partage “Depot” accessible uniquement en écriture (pas de modification).</li>
+        </ul>
     </article>
 
+    <!-- ENVIRONNEMENT -->
     <article class="sp-card fade">
         <h3>Environnement</h3>
-        <p>Linux, Samba, postes clients Windows, réseau local.</p>
+        <p>
+            <strong>Système :</strong> Debian 13 (Trixie)<br>
+            <strong>Service :</strong> Samba 4<br>
+            <strong>Clients :</strong> Windows 11 + Debian<br>
+            <strong>Outils :</strong> SSH, nano, smb.conf, testparm, chmod, chown
+        </p>
     </article>
 
+    <!-- RÉALISATION -->
     <article class="sp-card fade">
         <h3>Réalisation</h3>
-        <p>Installation de Samba, configuration des partages, gestion des permissions, tests d’accès.</p>
+
+        <h4>1. Installation de Samba</h4>
+        <p>
+            Installation du paquet Samba via apt, puis vérification du service.  
+            Le fichier <code>/etc/samba/smb.conf</code> a été utilisé pour configurer les partages.
+        </p>
+
+        <h4>2. Création des groupes et utilisateurs</h4>
+        <p>
+            Deux groupes ont été créés : <strong>gpb1sio1</strong> et <strong>gpb1sio2</strong>.  
+            Les utilisateurs suivants ont été ajoutés :
+        </p>
+        <ul>
+            <li>alicia (gpb1sio1)</li>
+            <li>nabil (gpb1sio1)</li>
+            <li>clara (gpb1sio2)</li>
+            <li>hedi (gpb1sio2)</li>
+        </ul>
+
+        <h4>3. Mise en place des répertoires</h4>
+        <p>
+            L’arborescence suivante a été créée dans <code>/home</code> :
+        </p>
+        <ul>
+            <li>B1Sio/</li>
+            <li>B1Sio1/</li>
+            <li>B1Sio2/</li>
+        </ul>
+        <p>
+            Les groupes propriétaires ont été attribués avec <code>chown</code>.
+        </p>
+
+        <h4>4. Configuration des droits Linux</h4>
+        <p>
+            Les droits des répertoires personnels ont été modifiés pour respecter les règles suivantes :
+        </p>
+        <ul>
+            <li>propriétaire : lecture, écriture, exécution,</li>
+            <li>groupe : lecture + exécution,</li>
+            <li>autres : aucun accès.</li>
+        </ul>
+        <p>
+            Les répertoires B1Sio1 et B1Sio2 ont été configurés pour que chaque groupe ait :
+        </p>
+        <ul>
+            <li>lecture/écriture dans son répertoire,</li>
+            <li>lecture seule dans l’autre.</li>
+        </ul>
+
+        <h4>5. Configuration des partages Samba</h4>
+        <p>
+            Exemple de partage configuré dans <code>smb.conf</code> :
+        </p>
+        <pre>
+[partageb1sio]
+comment = Dossier partage pour les B1
+path = /home/B1Sio
+browsable = yes
+writeable = yes
+create mask = 0755
+        </pre>
+
+        <h4>6. Tests d’accès</h4>
+        <p>
+            Les tests ont été réalisés depuis :
+        </p>
+        <ul>
+            <li>Windows : via <code>\\PartageSMB</code> et montage de lecteur réseau,</li>
+            <li>Linux : via <code>smb://PartageSMB</code>.</li>
+        </ul>
+        <p>
+            Les droits ont été validés :  
+            - Alicia peut écrire dans B1Sio1 mais pas dans B1Sio2.  
+            - Clara peut écrire dans B1Sio2 mais pas dans B1Sio1.
+        </p>
+
+        <h4>7. Partages supplémentaires</h4>
+        <p>
+            Deux partages supplémentaires ont été créés :
+        </p>
+        <ul>
+            <li><strong>PartagePourTous</strong> : écriture et modification pour tous les utilisateurs,</li>
+            <li><strong>Depot</strong> : écriture uniquement (pas de modification possible).</li>
+        </ul>
     </article>
 
+    <!-- BILAN -->
     <article class="sp-card fade">
         <h3>Bilan</h3>
-        <p>Compréhension de la gestion des droits et du fonctionnement d’un service de fichiers.</p>
+        <p>
+            Ce TP m’a permis de comprendre :
+        </p>
+        <ul>
+            <li>la différence entre droits Linux et droits Samba,</li>
+            <li>la gestion des utilisateurs et groupes,</li>
+            <li>la configuration d’un service réseau sous Linux,</li>
+            <li>la mise en place d’un partage multi‑plateforme,</li>
+            <li>la validation des droits via des tests Windows et Linux.</li>
+        </ul>
+        <p>
+            Cette activité m’a apporté une meilleure compréhension du fonctionnement d’un serveur de fichiers et de la gestion des permissions dans un environnement professionnel.
+        </p>
     </article>
 
 </section>
